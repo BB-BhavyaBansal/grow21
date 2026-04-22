@@ -82,4 +82,33 @@
     <!-- Session Complete -->
     <string name="session_complete_title">Session Complete!</string>
     <string name="session_complete_format">You scored %1$d out of %2$d</string>
+
+    <!-- Profile Switcher -->
+    <string name="label_child_mode">Child</string>
+    <string name="label_parent_mode">Parent</string>
+    <string name="content_desc_profile_switch">Switch between Child and Parent profile</string>
+
+    <!-- Parent Dashboard -->
+    <string name="title_parent_dashboard">Parent Dashboard</string>
+    <string name="title_streak_calendar">Activity Streak</string>
+    <string name="title_progress_report">Progress Report</string>
+    <string name="streak_format">&#x1F525; %1$d-day streak</string>
+    <string name="streak_zero">No streak yet — let\'s start!</string>
+    <string name="total_attempted_format">%1$d questions attempted</string>
+    <string name="overall_accuracy_format">%.0f%% overall accuracy</string>
+    <string name="empty_calendar">No activity recorded this month.</string>
+    <string name="child_name_format">%1$s\'s Learning Journey</string>
+
+    <!-- Parent Auth Dialog -->
+    <string name="dialog_parent_auth_title">Parent Verification</string>
+    <string name="dialog_parent_auth_message">Enter your account password to switch to Parent mode.</string>
+    <string name="hint_enter_password">Password</string>
+    <string name="btn_confirm">CONFIRM</string>
+    <string name="btn_cancel">CANCEL</string>
+    <string name="error_wrong_password">Incorrect password. Please try again.</string>
+
+    <!-- Logout -->
+    <string name="btn_logout">LOGOUT</string>
+    <string name="dialog_logout_title">Logout</string>
+    <string name="dialog_logout_message">Are you sure you want to log out?</string>
 </resources>

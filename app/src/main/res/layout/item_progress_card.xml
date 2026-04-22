@@ -35,14 +35,14 @@
                 android:layout_height="wrap_content"
                 android:textSize="16sp"
                 android:textStyle="bold"
-                android:textColor="@color/colorTextDark" />
+                android:textColor="?android:attr/textColorPrimary" />
 
             <TextView
                 android:id="@+id/tv_progress_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="14sp"
-                android:textColor="@color/colorTextGrey"
+                android:textColor="?android:attr/textColorSecondary"
                 android:layout_marginTop="2dp" />
 
             <ProgressBar

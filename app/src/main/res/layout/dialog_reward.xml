@@ -23,7 +23,7 @@
         android:text="@string/reward_correct_title"
         android:textSize="26sp"
         android:textStyle="bold"
-        android:textColor="@color/colorTextDark"
+        android:textColor="?android:attr/textColorPrimary"
         android:layout_marginBottom="8dp" />
 
     <TextView
@@ -32,7 +32,7 @@
         android:layout_height="wrap_content"
         android:text="@string/reward_correct_message"
         android:textSize="16sp"
-        android:textColor="@color/colorTextGrey"
+        android:textColor="?android:attr/textColorSecondary"
         android:gravity="center"
         android:layout_marginBottom="24dp" />
 

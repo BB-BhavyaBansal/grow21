@@ -6,6 +6,9 @@ import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 
+import android.content.SharedPreferences;
+import android.view.Menu;
+
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class SkillSelectionActivity extends AppCompatActivity {
@@ -62,5 +65,21 @@ public class SkillSelectionActivity extends AppCompatActivity {
             }
             return false;
         });
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        updateNavigationVisibility();
+    }
+
+    private void updateNavigationVisibility() {
+        SharedPreferences prefs = getSharedPreferences("grow21_prefs", MODE_PRIVATE);
+        boolean isParentMode = prefs.getBoolean("is_parent_mode", false);
+
+        Menu menu = bottomNavigation.getMenu();
+        // Child mode: Hide Report and Profile. Parent mode: Show all.
+        menu.findItem(R.id.nav_report).setVisible(isParentMode);
+        menu.findItem(R.id.nav_profile).setVisible(isParentMode);
     }
 }

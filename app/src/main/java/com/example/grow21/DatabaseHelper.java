@@ -254,4 +254,95 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
         return progressList;
     }
+
+    // ==================== Streak / Calendar Methods ====================
+
+    /**
+     * Returns a set of day-of-month integers that have at least one session
+     * in the given year and month. Used by the streak calendar to highlight active days.
+     *
+     * @param year  the calendar year (e.g. 2026)
+     * @param month the calendar month (1-12)
+     * @return set of day numbers with activity
+     */
+    public java.util.Set<Integer> getActiveDaysForMonth(int year, int month) {
+        java.util.Set<Integer> activeDays = new java.util.HashSet<>();
+        SQLiteDatabase db = this.getReadableDatabase();
+        // Session date format is "yyyy-MM-dd HH:mm:ss"
+        // Build prefix for the month, e.g. "2026-04"
+        String monthPrefix = String.format(Locale.getDefault(), "%04d-%02d", year, month);
+        String query = "SELECT DISTINCT substr(" + COL_SESSION_DATE + ", 9, 2) as day_num "
+                + "FROM " + TABLE_SESSION + " "
+                + "WHERE " + COL_SESSION_DATE + " LIKE ?";
+        Cursor cursor = db.rawQuery(query, new String[]{monthPrefix + "%"});
+        if (cursor != null && cursor.moveToFirst()) {
+            do {
+                String dayStr = cursor.getString(cursor.getColumnIndexOrThrow("day_num"));
+                try {
+                    activeDays.add(Integer.parseInt(dayStr));
+                } catch (NumberFormatException e) {
+                    // Skip malformed entries
+                }
+            } while (cursor.moveToNext());
+            cursor.close();
+        }
+        return activeDays;
+    }
+
+    /**
+     * Computes the current activity streak — the number of consecutive days
+     * ending at today (or yesterday if no session today yet) that have at least
+     * one session recorded.
+     *
+     * @return streak count (0 if no recent activity)
+     */
+    public int getCurrentStreak() {
+        SQLiteDatabase db = this.getReadableDatabase();
+        // Get all distinct session dates sorted descending
+        String query = "SELECT DISTINCT substr(" + COL_SESSION_DATE + ", 1, 10) as session_day "
+                + "FROM " + TABLE_SESSION + " "
+                + "ORDER BY session_day DESC";
+        Cursor cursor = db.rawQuery(query, null);
+        if (cursor == null || !cursor.moveToFirst()) {
+            if (cursor != null) cursor.close();
+            return 0;
+        }
+
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+        java.util.Calendar cal = java.util.Calendar.getInstance();
+        // Start from today
+        String today = sdf.format(cal.getTime());
+        String firstDate = cursor.getString(cursor.getColumnIndexOrThrow("session_day"));
+
+        // If the most recent session is not today or yesterday, streak is 0
+        cal.add(java.util.Calendar.DAY_OF_YEAR, -1);
+        String yesterday = sdf.format(cal.getTime());
+        cal.add(java.util.Calendar.DAY_OF_YEAR, 1); // reset to today
+
+        if (!firstDate.equals(today) && !firstDate.equals(yesterday)) {
+            cursor.close();
+            return 0;
+        }
+
+        // If latest is yesterday, start checking from yesterday
+        if (!firstDate.equals(today)) {
+            cal.add(java.util.Calendar.DAY_OF_YEAR, -1);
+        }
+
+        // Collect all distinct dates into a set for O(1) lookup
+        java.util.Set<String> dateSet = new java.util.HashSet<>();
+        do {
+            dateSet.add(cursor.getString(cursor.getColumnIndexOrThrow("session_day")));
+        } while (cursor.moveToNext());
+        cursor.close();
+
+        // Count consecutive days backwards
+        int streak = 0;
+        while (dateSet.contains(sdf.format(cal.getTime()))) {
+            streak++;
+            cal.add(java.util.Calendar.DAY_OF_YEAR, -1);
+        }
+
+        return streak;
+    }
 }

@@ -24,37 +24,16 @@
             </intent-filter>
         </activity>
 
-        <activity
-            android:name=".ChildSetupActivity"
-            android:exported="false" />
-
-        <activity
-            android:name=".SignupActivity"
-            android:exported="false" />
-
-        <activity
-            android:name=".StartActivity"
-            android:exported="false" />
-
-        <activity
-            android:name=".SkillSelectionActivity"
-            android:exported="false" />
-
-        <activity
-            android:name=".TapGameActivity"
-            android:exported="false" />
-
-        <activity
-            android:name=".ProgressActivity"
-            android:exported="false" />
-
-        <activity
-            android:name=".SettingsActivity"
-            android:exported="false" />
-
-        <activity
-            android:name=".ParentDashboardActivity"
-            android:exported="false" />
+        <activity android:name=".DragGameActivity" android:exported="false" />
+        <activity android:name=".MemoryGameActivity" android:exported="false" />
+        <activity android:name=".ChildSetupActivity" android:exported="false" />
+        <activity android:name=".SignupActivity" android:exported="false" />
+        <activity android:name=".StartActivity" android:exported="false" />
+        <activity android:name=".SkillSelectionActivity" android:exported="false" />
+        <activity android:name=".TapGameActivity" android:exported="false" />
+        <activity android:name=".ProgressActivity" android:exported="false" />
+        <activity android:name=".SettingsActivity" android:exported="false" />
+        <activity android:name=".ParentDashboardActivity" android:exported="false" />
 
     </application>
 

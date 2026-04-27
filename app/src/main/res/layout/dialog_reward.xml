@@ -1,48 +1,35 @@
-<?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:background="@drawable/bg_dialog_rounded"
-    android:gravity="center_horizontal"
-    android:padding="32dp">
+    android:padding="24dp"
+    android:gravity="center"
+    android:background="@android:color/white">
 
     <TextView
-        android:id="@+id/tv_reward_emoji"
+        android:id="@+id/tvRewardTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="⭐"
-        android:textSize="56sp"
-        android:layout_marginBottom="16dp" />
-
-    <TextView
-        android:id="@+id/tv_reward_title"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/reward_correct_title"
-        android:textSize="26sp"
+        android:text="Great Job!"
+        android:textSize="22sp"
         android:textStyle="bold"
-        android:textColor="?android:attr/textColorPrimary"
-        android:layout_marginBottom="8dp" />
+        android:textColor="#333"
+        android:layout_marginBottom="10dp"/>
 
     <TextView
-        android:id="@+id/tv_reward_message"
+        android:id="@+id/tvRewardSub"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/reward_correct_message"
+        android:text="You did amazing!"
         android:textSize="16sp"
-        android:textColor="?android:attr/textColorSecondary"
-        android:gravity="center"
-        android:layout_marginBottom="24dp" />
+        android:textColor="#666"
+        android:layout_marginBottom="20dp"/>
 
     <Button
-        android:id="@+id/btn_next"
-        android:layout_width="match_parent"
-        android:layout_height="56dp"
-        android:background="@drawable/bg_button_primary"
-        android:text="@string/btn_next"
-        android:textColor="@color/white"
-        android:textSize="18sp"
-        android:textStyle="bold" />
+        android:id="@+id/btnContinue"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Continue"
+        android:padding="10dp"/>
+
 </LinearLayout>

@@ -1,13 +1,12 @@
 package com.example.grow21;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.view.Menu;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
-
-import android.content.SharedPreferences;
-import android.view.Menu;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
@@ -24,45 +23,43 @@ public class SkillSelectionActivity extends AppCompatActivity {
         cardWordplay = findViewById(R.id.card_wordplay);
         cardBrain = findViewById(R.id.card_brain);
         cardPuzzles = findViewById(R.id.card_puzzles);
+
         bottomNavigation = findViewById(R.id.bottom_navigation);
 
-        // Move & Play → vocabulary category
-        cardWordplay.setOnClickListener(v -> {
-            Intent intent = new Intent(SkillSelectionActivity.this, TapGameActivity.class);
-            intent.putExtra("category", "vocabulary");
-            startActivity(intent);
-        });
+        // 🎮 Move & Play → Drag Game
+        cardWordplay.setOnClickListener(v ->
+                startActivity(new Intent(this, DragGameActivity.class))
+        );
 
-        // Vocabulary → vocabulary category (brain card)
+        // 🧠 Vocabulary → Tap Game
         cardBrain.setOnClickListener(v -> {
-            Intent intent = new Intent(SkillSelectionActivity.this, TapGameActivity.class);
-            intent.putExtra("category", "vocabulary");
+            Intent intent = new Intent(this, TapGameActivity.class);
+            intent.putExtra("category", "word");
             startActivity(intent);
         });
 
-        // Puzzles → shapes category
-        cardPuzzles.setOnClickListener(v -> {
-            Intent intent = new Intent(SkillSelectionActivity.this, TapGameActivity.class);
-            intent.putExtra("category", "shapes");
-            startActivity(intent);
-        });
+        // 🧩 Puzzle → Memory Game
+        cardPuzzles.setOnClickListener(v ->
+                startActivity(new Intent(this, MemoryGameActivity.class))
+        );
 
-        // Bottom navigation
         bottomNavigation.setOnItemSelectedListener(item -> {
-            int itemId = item.getItemId();
-            if (itemId == R.id.nav_menu) {
-                // Already on menu
-                return true;
-            } else if (itemId == R.id.nav_module) {
-                // Stay on current screen
-                return true;
-            } else if (itemId == R.id.nav_report) {
+            int id = item.getItemId();
+
+            if (id == R.id.nav_menu) return true;
+
+            else if (id == R.id.nav_module) return true;
+
+            else if (id == R.id.nav_report) {
                 startActivity(new Intent(this, ProgressActivity.class));
                 return true;
-            } else if (itemId == R.id.nav_profile) {
+            }
+
+            else if (id == R.id.nav_profile) {
                 startActivity(new Intent(this, SettingsActivity.class));
                 return true;
             }
+
             return false;
         });
     }
@@ -78,7 +75,6 @@ public class SkillSelectionActivity extends AppCompatActivity {
         boolean isParentMode = prefs.getBoolean("is_parent_mode", false);
 
         Menu menu = bottomNavigation.getMenu();
-        // Child mode: Hide Report and Profile. Parent mode: Show all.
         menu.findItem(R.id.nav_report).setVisible(isParentMode);
         menu.findItem(R.id.nav_profile).setVisible(isParentMode);
     }

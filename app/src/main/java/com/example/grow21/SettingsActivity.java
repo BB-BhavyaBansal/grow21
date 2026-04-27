@@ -49,7 +49,7 @@ public class SettingsActivity extends AppCompatActivity {
         switchSound = findViewById(R.id.switch_sound);
         switchLargeText = findViewById(R.id.switch_large_text);
         cardLogout = findViewById(R.id.card_logout);
-        themeGroup = findViewById(R.id.theme_group); // RadioGroup
+        themeGroup = findViewById(R.id.theme_group);
 
         // 🔊 Load values
         switchVoice.setChecked(prefs.getBoolean(KEY_VOICE, false));
@@ -74,7 +74,6 @@ public class SettingsActivity extends AppCompatActivity {
 
         // 🎨 THEME SETUP
         int savedTheme = prefs.getInt(KEY_THEME, 0); // 0=system,1=light,2=dark
-        themeGroup = findViewById(R.id.theme_group);
         if (savedTheme == 0) themeGroup.check(R.id.theme_system);
         else if (savedTheme == 1) themeGroup.check(R.id.theme_light);
         else themeGroup.check(R.id.theme_dark);
@@ -104,18 +103,17 @@ public class SettingsActivity extends AppCompatActivity {
         }
     }
 
-    // 🚪 LOGOUT
+    // 🚪 LOGOUT (UPDATED)
     private void showLogoutDialog() {
         new AlertDialog.Builder(this)
                 .setTitle(R.string.dialog_logout_title)
                 .setMessage(R.string.dialog_logout_message)
                 .setPositiveButton(R.string.btn_confirm, (dialog, which) -> {
 
-                    prefs.edit()
-                            .putBoolean(KEY_LOGGED_IN, false)
-                            .putBoolean(KEY_PARENT_MODE, false)
-                            .apply();
+                    // 🔥 Clear all stored data
+                    prefs.edit().clear().apply();
 
+                    // 🚀 Redirect to login & clear backstack
                     Intent intent = new Intent(SettingsActivity.this, LoginActivity.class);
                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     startActivity(intent);

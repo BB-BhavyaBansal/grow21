@@ -5,7 +5,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="?android:attr/windowBackground">
+    android:background="@color/colorBackground">
 
     <!-- Top Bar -->
     <LinearLayout
@@ -39,13 +39,6 @@
             android:max="100"
             android:progress="10"
             android:progressDrawable="@drawable/bg_progress_bar" />
-
-        <ImageView
-            android:id="@+id/iv_heart"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:src="@drawable/ic_heart"
-            android:contentDescription="Lives" />
     </LinearLayout>
 
     <!-- Question Text -->
@@ -105,6 +98,13 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="@drawable/bg_option_card_default">
+                <ImageView
+                    android:id="@+id/iv_option_1"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_margin="16dp"
+                    android:scaleType="centerInside"
+                    android:visibility="gone" />
                 <TextView
                     android:id="@+id/tv_option_1"
                     android:layout_width="wrap_content"
@@ -131,6 +131,13 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="@drawable/bg_option_card_default">
+                <ImageView
+                    android:id="@+id/iv_option_2"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_margin="16dp"
+                    android:scaleType="centerInside"
+                    android:visibility="gone" />
                 <TextView
                     android:id="@+id/tv_option_2"
                     android:layout_width="wrap_content"
@@ -157,6 +164,13 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="@drawable/bg_option_card_default">
+                <ImageView
+                    android:id="@+id/iv_option_3"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_margin="16dp"
+                    android:scaleType="centerInside"
+                    android:visibility="gone" />
                 <TextView
                     android:id="@+id/tv_option_3"
                     android:layout_width="wrap_content"
@@ -183,6 +197,13 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="@drawable/bg_option_card_default">
+                <ImageView
+                    android:id="@+id/iv_option_4"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_margin="16dp"
+                    android:scaleType="centerInside"
+                    android:visibility="gone" />
                 <TextView
                     android:id="@+id/tv_option_4"
                     android:layout_width="wrap_content"

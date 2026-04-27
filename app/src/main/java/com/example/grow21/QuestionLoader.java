@@ -59,6 +59,37 @@ public class QuestionLoader {
     }
 
     /**
+     * Loads questions filtered by type (e.g., "tap", "drag_match", "motor").
+     */
+    public static List<QuestionModel> loadQuestionsByType(Context context, String type) {
+        List<QuestionModel> allQuestions = loadAllQuestions(context);
+        List<QuestionModel> filtered = new ArrayList<>();
+        for (QuestionModel q : allQuestions) {
+            if (q.getType() != null && q.getType().equalsIgnoreCase(type)) {
+                filtered.add(q);
+            }
+        }
+        Collections.shuffle(filtered);
+        return filtered;
+    }
+
+    /**
+     * Loads questions filtered by both type and category.
+     */
+    public static List<QuestionModel> loadQuestionsByTypeAndCategory(Context context, String type, String category) {
+        List<QuestionModel> allQuestions = loadAllQuestions(context);
+        List<QuestionModel> filtered = new ArrayList<>();
+        for (QuestionModel q : allQuestions) {
+            if (q.getType() != null && q.getType().equalsIgnoreCase(type)
+                && q.getCategory() != null && q.getCategory().equalsIgnoreCase(category)) {
+                filtered.add(q);
+            }
+        }
+        Collections.shuffle(filtered);
+        return filtered;
+    }
+
+    /**
      * Reads a JSON file from the assets folder.
      */
     private static String readJsonFromAssets(Context context, String fileName) {

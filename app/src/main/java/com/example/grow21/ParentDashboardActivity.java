@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.ImageView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SwitchCompat;
@@ -41,6 +42,8 @@ public class ParentDashboardActivity extends AppCompatActivity {
     private TextView tvEmptyReport;
     private View cardSummary;
 
+    private ImageView btnSettings;
+
     private DatabaseHelper dbHelper;
 
     /** Currently displayed month/year for the calendar. */
@@ -58,6 +61,7 @@ public class ParentDashboardActivity extends AppCompatActivity {
 
         initViews();
         setupProfileSwitch();
+        setupSettingsButton();
         loadChildInfo();
         initCalendar();
         loadStreakData();
@@ -77,6 +81,14 @@ public class ParentDashboardActivity extends AppCompatActivity {
         tvOverallAccuracy = findViewById(R.id.tv_overall_accuracy);
         tvEmptyReport = findViewById(R.id.tv_empty_report);
         cardSummary = findViewById(R.id.card_summary);
+        btnSettings = findViewById(R.id.btn_settings);
+    }
+
+    private void setupSettingsButton() {
+        btnSettings.setOnClickListener(v -> {
+            Intent intent = new Intent(ParentDashboardActivity.this, SettingsActivity.class);
+            startActivity(intent);
+        });
     }
 
     /**

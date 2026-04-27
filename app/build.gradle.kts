@@ -4,7 +4,9 @@ plugins {
 
 android {
     namespace = "com.example.grow21"
-    compileSdk = 36
+    compileSdk {
+        version = release(36)
+    }
 
     defaultConfig {
         applicationId = "com.example.grow21"

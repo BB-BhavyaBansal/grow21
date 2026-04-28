@@ -18,6 +18,42 @@
     "answer": "Apple"
   },
   {
+    "id": "q10",
+    "type": "tap",
+    "category": "vocabulary",
+    "question": "What is this?",
+    "image": "car",
+    "options": ["Bus", "Train", "Car", "Bicycle"],
+    "answer": "Car"
+  },
+  {
+    "id": "q11",
+    "type": "tap",
+    "category": "vocabulary",
+    "question": "What is this?",
+    "image": "sun",
+    "options": ["Moon", "Star", "Sun", "Cloud"],
+    "answer": "Sun"
+  },
+  {
+    "id": "q12",
+    "type": "tap",
+    "category": "vocabulary",
+    "question": "What is this?",
+    "image": "cat",
+    "options": ["Dog", "Cat", "Mouse", "Rabbit"],
+    "answer": "Cat"
+  },
+  {
+    "id": "q13",
+    "type": "tap",
+    "category": "vocabulary",
+    "question": "What is this?",
+    "image": "tree",
+    "options": ["Flower", "Tree", "Bush", "Grass"],
+    "answer": "Tree"
+  },
+  {
     "id": "q3",
     "type": "tap",
     "category": "colors",

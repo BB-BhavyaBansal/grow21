@@ -139,7 +139,7 @@
         android:layout_height="280dp"
         android:layout_marginTop="60dp"
         android:layout_marginBottom="60dp"
-        android:background="@drawable/bg_placeholder_mascot"
+        android:src="@drawable/mascot"
         android:scaleType="centerInside"
         android:tag="mascot_image"
         android:contentDescription="App mascot"

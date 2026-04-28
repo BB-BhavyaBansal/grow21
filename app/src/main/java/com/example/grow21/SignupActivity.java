@@ -1,6 +1,7 @@
 package com.example.grow21;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.widget.Button;
@@ -63,8 +64,16 @@ public class SignupActivity extends AppCompatActivity {
 
         boolean success = db.registerUser(email, password);
         if (success) {
+            SharedPreferences prefs = getSharedPreferences("grow21_prefs", MODE_PRIVATE);
+            prefs.edit()
+                 .putBoolean("is_logged_in", true)
+                 .putString("user_email", email)
+                 .apply();
+
             Toast.makeText(this, R.string.signup_success, Toast.LENGTH_SHORT).show();
-            finish(); // Go back to LoginActivity
+            Intent intent = new Intent(this, ChildSetupActivity.class);
+            startActivity(intent);
+            finish();
         } else {
             Toast.makeText(this, R.string.error_login_failed, Toast.LENGTH_SHORT).show();
         }

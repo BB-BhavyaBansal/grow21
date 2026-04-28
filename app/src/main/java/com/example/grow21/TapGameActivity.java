@@ -28,7 +28,7 @@ import com.example.grow21.models.QuestionModel;
 import java.util.List;
 import java.util.Locale;
 
-public class TapGameActivity extends AppCompatActivity implements TextToSpeech.OnInitListener {
+public class TapGameActivity extends AppCompatActivity {
 
     private ImageButton btnClose;
     private ProgressBar progressBar;
@@ -48,8 +48,9 @@ public class TapGameActivity extends AppCompatActivity implements TextToSpeech.O
 
     private DatabaseHelper dbHelper;
     private Handler handler;
-    private TextToSpeech tts;
+    private TTSManager ttsManager;
     private boolean ttsEnabled = false;
+    private boolean soundEnabled = true; // Add this
 
     private CardView[] optionCards;
     private FrameLayout[] optionFrames;
@@ -68,8 +69,10 @@ public class TapGameActivity extends AppCompatActivity implements TextToSpeech.O
 
         SharedPreferences prefs = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
         ttsEnabled = prefs.getBoolean("voice_instructions", false);
+        soundEnabled = prefs.getBoolean("sound_effects", true);
+
         if (ttsEnabled) {
-            tts = new TextToSpeech(this, this);
+            ttsManager = new TTSManager(this);
         }
 
         category = getIntent().getStringExtra("category");
@@ -192,8 +195,8 @@ public class TapGameActivity extends AppCompatActivity implements TextToSpeech.O
         int progress = (int) (((float) currentQuestionIndex / questions.size()) * 100);
         progressBar.setProgress(progress);
 
-        if (ttsEnabled && tts != null) {
-            tts.speak(question.getQuestion(), TextToSpeech.QUEUE_FLUSH, null, "question");
+        if (ttsEnabled && ttsManager != null) {
+            ttsManager.speak("Match the shapes!");
         }
         
         // Handle optional audio
@@ -318,6 +321,7 @@ public class TapGameActivity extends AppCompatActivity implements TextToSpeech.O
     }
 
     private void finishGame() {
+        GameCelebrationUtil.celebrate(this);
         dbHelper.insertSession(category, score, questions.size());
         String message = getString(R.string.session_complete_format, score, questions.size());
         new AlertDialog.Builder(this)
@@ -331,18 +335,11 @@ public class TapGameActivity extends AppCompatActivity implements TextToSpeech.O
                 .show();
     }
 
-    @Override
-    public void onInit(int status) {
-        if (status == TextToSpeech.SUCCESS) {
-            tts.setLanguage(Locale.US);
-        }
-    }
 
     @Override
     protected void onDestroy() {
-        if (tts != null) {
-            tts.stop();
-            tts.shutdown();
+        if (ttsManager != null) {
+            ttsManager.shutdown();
         }
         handler.removeCallbacksAndMessages(null);
         super.onDestroy();

@@ -39,7 +39,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 
-public class DragGameActivity extends AppCompatActivity implements TextToSpeech.OnInitListener {
+public class DragGameActivity extends AppCompatActivity {
 
     private ImageButton btnClose;
     private TextView tvScore, tvProgress, tvStatus;
@@ -57,8 +57,9 @@ public class DragGameActivity extends AppCompatActivity implements TextToSpeech.
 
     private DatabaseHelper dbHelper;
     private Handler handler;
-    private TextToSpeech tts;
+    private TTSManager ttsManager;
     private boolean ttsEnabled = false;
+    private boolean soundEnabled = true;
 
     private static final String PREFS_NAME = "grow21_prefs";
 
@@ -72,8 +73,10 @@ public class DragGameActivity extends AppCompatActivity implements TextToSpeech.
 
         SharedPreferences prefs = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
         ttsEnabled = prefs.getBoolean("voice_instructions", false);
+        soundEnabled = prefs.getBoolean("sound_effects", true);
+
         if (ttsEnabled) {
-            tts = new TextToSpeech(this, this);
+            ttsManager = new TTSManager(this);
         }
 
         category = getIntent().getStringExtra("category");
@@ -196,14 +199,14 @@ public class DragGameActivity extends AppCompatActivity implements TextToSpeech.
             createDraggableItem(item);
         }
 
-        if (ttsEnabled && tts != null) {
-            tts.speak("Match the shapes!", TextToSpeech.QUEUE_FLUSH, null, "question");
+        if (ttsManager != null) {
+            ttsManager.speak("What is this?");
         }
 
-        if (question.getAudio() != null && !question.getAudio().isEmpty()) {
+        if (soundEnabled) {
             ToneGenerator toneGen = new ToneGenerator(AudioManager.STREAM_MUSIC, 100);
-            toneGen.startTone(ToneGenerator.TONE_DTMF_1, 300);
-            handler.postDelayed(toneGen::release, 350);
+            toneGen.startTone(ToneGenerator.TONE_PROP_ACK, 200); // or TONE_DTMF_1, TONE_PROP_NACK
+            handler.postDelayed(toneGen::release, 250);
         }
     }
 
@@ -393,6 +396,7 @@ public class DragGameActivity extends AppCompatActivity implements TextToSpeech.
     }
 
     private void finishGame() {
+        GameCelebrationUtil.celebrate(this);
         dbHelper.insertSession(category, score, questions.size());
         String message = getString(R.string.session_complete_format, score, questions.size());
         new AlertDialog.Builder(this)
@@ -412,18 +416,11 @@ public class DragGameActivity extends AppCompatActivity implements TextToSpeech.
                 getResources().getDisplayMetrics());
     }
 
-    @Override
-    public void onInit(int status) {
-        if (status == TextToSpeech.SUCCESS) {
-            tts.setLanguage(Locale.US);
-        }
-    }
 
     @Override
     protected void onDestroy() {
-        if (tts != null) {
-            tts.stop();
-            tts.shutdown();
+        if (ttsManager != null) {
+            ttsManager.shutdown();
         }
         handler.removeCallbacksAndMessages(null);
         super.onDestroy();

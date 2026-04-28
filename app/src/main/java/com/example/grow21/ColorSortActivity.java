@@ -56,6 +56,11 @@ public class ColorSortActivity extends AppCompatActivity {
 
     private DatabaseHelper dbHelper;
     private Handler handler;
+    private static final String PREFS_NAME = "grow21_prefs";
+
+    private TTSManager ttsManager;
+    private boolean ttsEnabled = false;
+    private boolean soundEnabled = true; // Add this
 
     private static final Map<String, Integer> BIN_DRAWABLES = new HashMap<>();
     private static final Map<String, Integer> BIN_COLORS = new HashMap<>();
@@ -77,6 +82,14 @@ public class ColorSortActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_color_sort);
+
+        SharedPreferences prefs = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+        ttsEnabled = prefs.getBoolean("voice_instructions", false);
+        soundEnabled = prefs.getBoolean("sound_effects", true);
+
+        if (ttsEnabled && ttsManager != null) {
+            ttsManager.speak("Sort by color");
+        }
 
         handler = new Handler(Looper.getMainLooper());
         dbHelper = DatabaseHelper.getInstance(this);
@@ -365,6 +378,7 @@ public class ColorSortActivity extends AppCompatActivity {
     }
 
     private void finishGame() {
+        GameCelebrationUtil.celebrate(this);
         dbHelper.insertSession("puzzle_color_sort", sortedCount, totalItems);
         new AlertDialog.Builder(this)
                 .setTitle(R.string.session_complete_title)
@@ -381,9 +395,11 @@ public class ColorSortActivity extends AppCompatActivity {
                 TypedValue.COMPLEX_UNIT_DIP, dp,
                 getResources().getDisplayMetrics());
     }
-
     @Override
     protected void onDestroy() {
+        if (ttsManager != null) {
+            ttsManager.shutdown();
+        }
         handler.removeCallbacksAndMessages(null);
         super.onDestroy();
     }

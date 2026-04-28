@@ -27,7 +27,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 
-public class MotorGameActivity extends AppCompatActivity implements TextToSpeech.OnInitListener {
+public class MotorGameActivity extends AppCompatActivity {
 
     private ImageButton btnClose;
     private ProgressBar progressBar;
@@ -42,9 +42,9 @@ public class MotorGameActivity extends AppCompatActivity implements TextToSpeech
 
     private DatabaseHelper dbHelper;
     private Handler handler;
-    private TextToSpeech tts;
+    private TTSManager ttsManager;
     private boolean ttsEnabled = false;
-
+    private boolean soundEnabled = true; // Add this
     private static final String PREFS_NAME = "grow21_prefs";
 
     @Override
@@ -57,8 +57,10 @@ public class MotorGameActivity extends AppCompatActivity implements TextToSpeech
 
         SharedPreferences prefs = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
         ttsEnabled = prefs.getBoolean("voice_instructions", false);
+        soundEnabled = prefs.getBoolean("sound_effects", true);
+
         if (ttsEnabled) {
-            tts = new TextToSpeech(this, this);
+            ttsManager = new TTSManager(this);
         }
 
         category = getIntent().getStringExtra("category");
@@ -142,8 +144,8 @@ public class MotorGameActivity extends AppCompatActivity implements TextToSpeech
         int progress = (int) (((float) currentQuestionIndex / questions.size()) * 100);
         progressBar.setProgress(progress);
 
-        if (ttsEnabled && tts != null) {
-            tts.speak(question.getQuestion(), TextToSpeech.QUEUE_FLUSH, null, "question");
+        if (ttsEnabled && ttsManager != null) {
+            ttsManager.speak("Match the shapes!");
         }
     }
 
@@ -263,8 +265,16 @@ public class MotorGameActivity extends AppCompatActivity implements TextToSpeech
     }
 
     private void finishGame() {
+        GameCelebrationUtil.celebrate(this);
         dbHelper.insertSession(category, score, questions.size());
-        String message = getString(R.string.session_complete_format, score, questions.size());
+        String message;
+        if ("free_draw".equals(category) || "trace_lines".equals(category)) {
+            // No percentage calculation for drawing games
+            message = "Great job on your drawing!";
+        } else {
+            // Show score/percentage for other games
+            message = getString(R.string.session_complete_format, score, questions.size());
+        }
         new AlertDialog.Builder(this)
                 .setTitle(R.string.session_complete_title)
                 .setMessage(message)
@@ -276,18 +286,11 @@ public class MotorGameActivity extends AppCompatActivity implements TextToSpeech
                 .show();
     }
 
-    @Override
-    public void onInit(int status) {
-        if (status == TextToSpeech.SUCCESS) {
-            tts.setLanguage(Locale.US);
-        }
-    }
 
     @Override
     protected void onDestroy() {
-        if (tts != null) {
-            tts.stop();
-            tts.shutdown();
+        if (ttsManager != null) {
+            ttsManager.shutdown();
         }
         handler.removeCallbacksAndMessages(null);
         super.onDestroy();

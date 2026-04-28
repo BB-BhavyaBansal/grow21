@@ -3,6 +3,7 @@ package com.example.grow21;
 import android.animation.AnimatorInflater;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.media.AudioManager;
 import android.media.ToneGenerator;
@@ -64,11 +65,23 @@ public class MemoryFlipActivity extends AppCompatActivity {
 
     private DatabaseHelper dbHelper;
     private Handler handler;
+    private static final String PREFS_NAME = "grow21_prefs";
+    private TTSManager ttsManager;
+    private boolean ttsEnabled = false;
+    private boolean soundEnabled = true; // Add this
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_memory_flip);
+
+        SharedPreferences prefs = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+        ttsEnabled = prefs.getBoolean("voice_instructions", false);
+        soundEnabled = prefs.getBoolean("sound_effects", true);
+
+        if (ttsEnabled) {
+            ttsManager = new TTSManager(this);
+        }
 
         handler = new Handler(Looper.getMainLooper());
         dbHelper = DatabaseHelper.getInstance(this);
@@ -76,6 +89,7 @@ public class MemoryFlipActivity extends AppCompatActivity {
         initViews();
         loadQuestions();
     }
+
 
     private void initViews() {
         btnClose = findViewById(R.id.btn_close);
@@ -404,6 +418,7 @@ public class MemoryFlipActivity extends AppCompatActivity {
     }
 
     private void finishGame() {
+        GameCelebrationUtil.celebrate(this);
         dbHelper.insertSession("puzzle_memory", questions.size(), questions.size());
         new AlertDialog.Builder(this)
                 .setTitle(R.string.session_complete_title)
